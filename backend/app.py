@@ -3,18 +3,10 @@ from flask import Flask, jsonify, request
 app = Flask(__name__)
 
 
-# --------------------------------
-# Home
-# --------------------------------
-
 @app.route("/")
 def home():
     return "Kisan Sathi Backend is Working!"
 
-
-# --------------------------------
-# Backend Status - GET
-# --------------------------------
 
 @app.route("/api/status", methods=["GET"])
 def status():
@@ -24,23 +16,122 @@ def status():
     })
 
 
-# --------------------------------
-# Farmer Advice - POST
-# --------------------------------
+def normalize_question(question):
+    question = question.strip().lower()
+
+    replacements = {
+        "paani": "pani",
+        "panie": "pani",
+        "gandum": "gandum",
+        "gehoon": "gandum",
+        "gehun": "gandum",
+        "chawal": "chawal",
+        "kapas": "kapas",
+        "cotton": "kapas",
+        "makai": "makai",
+        "maize": "makai",
+        "jowar": "jowar",
+        "sorghum": "jowar",
+        "til": "til",
+        "sesame": "til"
+    }
+
+    for old_word, new_word in replacements.items():
+        question = question.replace(old_word, new_word)
+
+    return question
+
+
+def detect_crop(question):
+    if "gandum" in question:
+        return "Gandum"
+    elif "chawal" in question:
+        return "Chawal"
+    elif "kapas" in question:
+        return "Kapas"
+    elif "makai" in question:
+        return "Makai"
+    elif "jowar" in question:
+        return "Jowar"
+    elif "til" in question:
+        return "Til"
+    else:
+        return "Maloom nahi"
+
+
+def detect_question_type(question):
+    if "pani" in question:
+        return "Pani"
+    elif "khaad" in question:
+        return "Khaad"
+    elif "bimari" in question:
+        return "Bimari"
+    else:
+        return "Maloom nahi"
+
+
+def get_advice(crop, question_type):
+    if crop == "Gandum" and question_type == "Pani":
+        return (
+            "Gandum ko pani mitti ki halat dekh kar dein. "
+            "Agar mitti zyada sookhi ho to pani dein."
+        )
+
+    elif crop == "Gandum" and question_type == "Khaad":
+        return (
+            "Gandum ke liye khaad mitti aur fasal ki zaroorat "
+            "dekh kar deni chahiye."
+        )
+
+    elif crop == "Gandum" and question_type == "Bimari":
+        return (
+            "Agar Gandum mein bimari nazar aa rahi hai to "
+            "pehle bimari ki nishaniyan check karein."
+        )
+
+    elif crop == "Chawal" and question_type == "Pani":
+        return (
+            "Chawal ko fasal ki zaroorat ke mutabiq pani dein. "
+            "Zaroorat se zyada pani na dein."
+        )
+
+    elif crop == "Kapas" and question_type == "Pani":
+        return (
+            "Kapas ko zaroorat ke mutabiq pani dein aur "
+            "mitti ko bohat zyada geela na rakhein."
+        )
+
+    elif crop == "Makai" and question_type == "Pani":
+        return (
+            "Makai ko waqt par pani dein. "
+            "Mitti ko bohat zyada sookhne na dein."
+        )
+
+    elif crop == "Jowar" and question_type == "Pani":
+        return (
+            "Jowar ko fasal ki zaroorat ke mutabiq pani dein."
+        )
+
+    elif crop == "Til" and question_type == "Pani":
+        return (
+            "Til ko zaroorat ke mutabiq pani dein aur "
+            "zyada pani se bachayein."
+        )
+
+    else:
+        return "Is sawal ke liye maloomat abhi hamare paas nahi hai."
+
 
 @app.route("/api/advice", methods=["POST"])
 def advice():
-
     data = request.get_json()
 
-    # Request body check
     if not data:
         return jsonify({
             "status": "error",
             "message": "Sawal bhejein."
         }), 400
 
-    # Question check
     question = data.get("question")
 
     if not question:
@@ -49,129 +140,17 @@ def advice():
             "message": "Sawal zaroor likhein."
         }), 400
 
-    # Question ko clean karna
-    question = question.strip().lower()
+    question = normalize_question(question)
 
-    # Empty spaces wala question
     if not question:
         return jsonify({
             "status": "error",
             "message": "Sawal zaroor likhein."
         }), 400
 
-
-    # --------------------------------
-    # Crop identify karna
-    # --------------------------------
-
-    if "gandum" in question:
-        crop = "Gandum"
-
-    elif "chawal" in question:
-        crop = "Chawal"
-
-    elif "kapas" in question:
-        crop = "Kapas"
-
-    elif "makai" in question:
-        crop = "Makai"
-
-    elif "jowar" in question:
-        crop = "Jowar"
-
-    elif "til" in question:
-        crop = "Til"
-
-    else:
-        crop = "Maloom nahi"
-
-
-    # --------------------------------
-    # Sawal ka type identify karna
-    # --------------------------------
-
-    if "pani" in question:
-        question_type = "Pani"
-
-    elif "khaad" in question:
-        question_type = "Khaad"
-
-    elif "bimari" in question:
-        question_type = "Bimari"
-
-    else:
-        question_type = "Maloom nahi"
-
-
-    # --------------------------------
-    # Simple jawab
-    # --------------------------------
-
-    if crop == "Gandum" and question_type == "Pani":
-
-        answer = (
-            "Gandum ko pani mitti ki halat dekh kar dein. "
-            "Agar mitti zyada sookhi ho to pani dein."
-        )
-
-    elif crop == "Gandum" and question_type == "Khaad":
-
-        answer = (
-            "Gandum ke liye khaad mitti aur fasal ki zaroorat "
-            "dekh kar deni chahiye."
-        )
-
-    elif crop == "Gandum" and question_type == "Bimari":
-
-        answer = (
-            "Agar Gandum mein bimari nazar aa rahi hai to "
-            "pehle bimari ki nishaniyan check karein."
-        )
-
-    elif crop == "Chawal" and question_type == "Pani":
-
-        answer = (
-            "Chawal ko fasal ki zaroorat ke mutabiq pani dein. "
-            "Zaroorat se zyada pani na dein."
-        )
-
-    elif crop == "Kapas" and question_type == "Pani":
-
-        answer = (
-            "Kapas ko zaroorat ke mutabiq pani dein aur "
-            "mitti ko bohat zyada geela na rakhein."
-        )
-
-    elif crop == "Makai" and question_type == "Pani":
-
-        answer = (
-            "Makai ko waqt par pani dein. "
-            "Mitti ko bohat zyada sookhne na dein."
-        )
-
-    elif crop == "Jowar" and question_type == "Pani":
-
-        answer = (
-            "Jowar ko fasal ki zaroorat ke mutabiq pani dein."
-        )
-
-    elif crop == "Til" and question_type == "Pani":
-
-        answer = (
-            "Til ko zaroorat ke mutabiq pani dein aur "
-            "zyada pani se bachayein."
-        )
-
-    else:
-
-        answer = (
-            "Is sawal ke liye maloomat abhi hamare paas nahi hai."
-        )
-
-
-    # --------------------------------
-    # Successful response
-    # --------------------------------
+    crop = detect_crop(question)
+    question_type = detect_question_type(question)
+    answer = get_advice(crop, question_type)
 
     return jsonify({
         "status": "success",
@@ -181,10 +160,6 @@ def advice():
         "jawab": answer
     })
 
-
-# --------------------------------
-# Start Flask
-# --------------------------------
 
 if __name__ == "__main__":
     app.run(debug=True)
