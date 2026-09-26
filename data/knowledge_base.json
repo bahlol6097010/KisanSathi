@@ -15,6 +15,40 @@
                         "source": "Punjab Agriculture Department - Wheat Research Institute"
                     }
                 ],
+                "Spray": [
+                    {
+                        "problem": "Kungi / Rust",
+                        "information": "Gandum ki fasal ko baqaidgi se check karein. Agar kungi ya rust ki alamat nazar aayen to local Agriculture Department ya Pest Warning ke maahir ke mashware se munasib fungicide spray karein.",
+                        "source": "Punjab Agriculture Department - Wheat Rust Advisory",
+                        "dose_per_litre_water_ml": null,
+                        "water_per_acre_liters": null,
+                        "water_rate_status": "Pakistan-specific verified water-per-acre rate pending"
+                    },
+                    {
+                        "problem": "Yellow Rust / Peeli Kungi",
+                        "information": "Punjab Agriculture Department ke PPRI data mein wheat Yellow Rust ke liye propiconazole 1 mL per litre pani listed hai. Spray se pehle local agricultural expert aur product label ki hidayat check karein.",
+                        "source": "Punjab Agriculture Department - PPRI Achievements",
+                        "dose_per_litre_water_ml": 1,
+                        "water_per_acre_liters": null,
+                        "water_rate_status": "Pakistan-specific verified water-per-acre rate pending"
+                    },
+                    {
+                        "problem": "Brown Rust / Bhuri Kungi",
+                        "information": "Punjab Agriculture Department ke PPRI data mein wheat Brown Rust ke liye propiconazole 1 mL per litre pani listed hai. Spray se pehle local agricultural expert aur product label ki hidayat check karein.",
+                        "source": "Punjab Agriculture Department - PPRI Achievements",
+                        "dose_per_litre_water_ml": 1,
+                        "water_per_acre_liters": null,
+                        "water_rate_status": "Pakistan-specific verified water-per-acre rate pending"
+                    },
+                    {
+                        "problem": "Jari Bootiyan / Weeds",
+                        "information": "Gandum mein jari bootiyon ko control karna zaroori hai. Suitable weed killer ka intekhab local agricultural expert ke mashware se karein. Tez hawa, dhund ya barish mein spray na karein aur spray ke liye munasib nozzle istemal karein.",
+                        "source": "Punjab Agriculture Department - Wheat Weeds Advisory, December 2025",
+                        "dose_per_litre_water_ml": null,
+                        "water_per_acre_liters": null,
+                        "water_rate_status": "Product-specific rate required"
+                    }
+                ],
                 "Bimari": [
                     {
                         "information": "Gandum mein rust, smut, bunt, blast aur kuch viral diseases aham bimariyon mein shamil hain. Bimari ki sahi pehchan ke liye nishaniyan check karna zaroori hai.",
@@ -34,6 +68,7 @@
             "topics": {
                 "Pani": [],
                 "Khaad": [],
+                "Spray": [],
                 "Bimari": [],
                 "Growth": []
             }
@@ -43,6 +78,7 @@
             "topics": {
                 "Pani": [],
                 "Khaad": [],
+                "Spray": [],
                 "Bimari": [],
                 "Growth": []
             }
@@ -52,6 +88,7 @@
             "topics": {
                 "Pani": [],
                 "Khaad": [],
+                "Spray": [],
                 "Bimari": [],
                 "Growth": []
             }
@@ -61,6 +98,7 @@
             "topics": {
                 "Pani": [],
                 "Khaad": [],
+                "Spray": [],
                 "Bimari": [],
                 "Growth": []
             }
@@ -70,6 +108,7 @@
             "topics": {
                 "Pani": [],
                 "Khaad": [],
+                "Spray": [],
                 "Bimari": [],
                 "Growth": []
             }
