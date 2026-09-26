@@ -1,0 +1,78 @@
+{
+    "crops": [
+        {
+            "name": "Gandum",
+            "topics": {
+                "Pani": [
+                    {
+                        "information": "Gandum mein pani ki zaroorat fasal ki halat aur ilaqay ke mutabiq dekhi jati hai. Pani ki kami wheat production ko kam kar sakti hai.",
+                        "source": "Pakistan Agricultural Research Council (PARC) - Wheat Program"
+                    }
+                ],
+                "Khaad": [
+                    {
+                        "information": "Gandum mein khaad ka istemal fasal ki zaroorat aur input management ke mutabiq karna chahiye.",
+                        "source": "Punjab Agriculture Department - Wheat Research Institute"
+                    }
+                ],
+                "Bimari": [
+                    {
+                        "information": "Gandum mein rust, smut, bunt, blast aur kuch viral diseases aham bimariyon mein shamil hain. Bimari ki sahi pehchan ke liye nishaniyan check karna zaroori hai.",
+                        "source": "Punjab Agriculture Department - Wheat Research Institute"
+                    }
+                ],
+                "Growth": [
+                    {
+                        "information": "Gandum ki behtar paidawar ke liye waqt par kasht, munasib input management, pani aur weeds ka control important hain.",
+                        "source": "Pakistan Agricultural Research Council (PARC) - Wheat Program"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Chawal",
+            "topics": {
+                "Pani": [],
+                "Khaad": [],
+                "Bimari": [],
+                "Growth": []
+            }
+        },
+        {
+            "name": "Kapas",
+            "topics": {
+                "Pani": [],
+                "Khaad": [],
+                "Bimari": [],
+                "Growth": []
+            }
+        },
+        {
+            "name": "Makai",
+            "topics": {
+                "Pani": [],
+                "Khaad": [],
+                "Bimari": [],
+                "Growth": []
+            }
+        },
+        {
+            "name": "Jowar",
+            "topics": {
+                "Pani": [],
+                "Khaad": [],
+                "Bimari": [],
+                "Growth": []
+            }
+        },
+        {
+            "name": "Til",
+            "topics": {
+                "Pani": [],
+                "Khaad": [],
+                "Bimari": [],
+                "Growth": []
+            }
+        }
+    ]
+}

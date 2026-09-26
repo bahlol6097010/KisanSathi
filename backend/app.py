@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+import json
+import os
 
 app = Flask(__name__)
 
@@ -14,6 +16,14 @@ def status():
         "status": "success",
         "message": "Kisan Sathi backend is running."
     })
+
+
+def load_knowledge_base():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    file_path = os.path.join(base_dir, "data", "knowledge_base.json")
+
+    with open(file_path, "r", encoding="utf-8") as file:
+        return json.load(file)
 
 
 def normalize_question(question):
@@ -66,60 +76,49 @@ def detect_question_type(question):
         return "Khaad"
     elif "bimari" in question:
         return "Bimari"
+    elif "growth" in question:
+        return "Growth"
     else:
         return "Maloom nahi"
 
 
-def get_advice(crop, question_type):
-    if crop == "Gandum" and question_type == "Pani":
-        return (
-            "Gandum ko pani mitti ki halat dekh kar dein. "
-            "Agar mitti zyada sookhi ho to pani dein."
-        )
+def get_knowledge(crop, question_type):
+    knowledge = load_knowledge_base()
 
-    elif crop == "Gandum" and question_type == "Khaad":
-        return (
-            "Gandum ke liye khaad mitti aur fasal ki zaroorat "
-            "dekh kar deni chahiye."
-        )
+    for crop_data in knowledge["crops"]:
+        if crop_data["name"] == crop:
+            topics = crop_data["topics"]
 
-    elif crop == "Gandum" and question_type == "Bimari":
-        return (
-            "Agar Gandum mein bimari nazar aa rahi hai to "
-            "pehle bimari ki nishaniyan check karein."
-        )
+            if question_type in topics:
+                information = topics[question_type]
 
-    elif crop == "Chawal" and question_type == "Pani":
-        return (
-            "Chawal ko fasal ki zaroorat ke mutabiq pani dein. "
-            "Zaroorat se zyada pani na dein."
-        )
+                if information:
+                    return information
 
-    elif crop == "Kapas" and question_type == "Pani":
-        return (
-            "Kapas ko zaroorat ke mutabiq pani dein aur "
-            "mitti ko bohat zyada geela na rakhein."
-        )
+    return []
 
-    elif crop == "Makai" and question_type == "Pani":
-        return (
-            "Makai ko waqt par pani dein. "
-            "Mitti ko bohat zyada sookhne na dein."
-        )
 
-    elif crop == "Jowar" and question_type == "Pani":
-        return (
-            "Jowar ko fasal ki zaroorat ke mutabiq pani dein."
-        )
+@app.route("/api/knowledge-base", methods=["GET"])
+def knowledge_base():
+    try:
+        knowledge = load_knowledge_base()
 
-    elif crop == "Til" and question_type == "Pani":
-        return (
-            "Til ko zaroorat ke mutabiq pani dein aur "
-            "zyada pani se bachayein."
-        )
+        return jsonify({
+            "status": "success",
+            "knowledge_base": knowledge
+        })
 
-    else:
-        return "Is sawal ke liye maloomat abhi hamare paas nahi hai."
+    except FileNotFoundError:
+        return jsonify({
+            "status": "error",
+            "message": "Knowledge Base file nahi mili."
+        }), 500
+
+    except json.JSONDecodeError:
+        return jsonify({
+            "status": "error",
+            "message": "Knowledge Base JSON file mein error hai."
+        }), 500
 
 
 @app.route("/api/advice", methods=["POST"])
@@ -150,14 +149,23 @@ def advice():
 
     crop = detect_crop(question)
     question_type = detect_question_type(question)
-    answer = get_advice(crop, question_type)
+
+    knowledge = get_knowledge(crop, question_type)
+
+    if knowledge:
+        answer = knowledge[0]["information"]
+        source = knowledge[0]["source"]
+    else:
+        answer = "Is sawal ke liye maloomat abhi hamare paas nahi hai."
+        source = "Knowledge Base mein maloomat available nahi."
 
     return jsonify({
         "status": "success",
         "sawal": question,
         "fasal": crop,
         "sawal_ka_type": question_type,
-        "jawab": answer
+        "jawab": answer,
+        "source": source
     })
 
 

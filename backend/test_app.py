@@ -129,6 +129,67 @@ class TestKisanSathiAPI(unittest.TestCase):
 
         self.assertEqual(data["fasal"], "Makai")
 
+    def test_knowledge_base_api(self):
+        response = self.client.get("/api/knowledge-base")
+
+        self.assertEqual(response.status_code, 200)
+
+        data = response.get_json()
+
+        self.assertEqual(data["status"], "success")
+        self.assertIn("knowledge_base", data)
+
+    def test_gandum_pani_knowledge(self):
+        response = self.client.post(
+            "/api/advice",
+            json={
+                "question": "Meri gandum ko pani kab dena hai?"
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        data = response.get_json()
+
+        self.assertEqual(data["fasal"], "Gandum")
+        self.assertEqual(data["sawal_ka_type"], "Pani")
+        self.assertNotEqual(data["jawab"], "")
+        self.assertNotEqual(data["source"], "")
+
+    def test_gandum_khaad_knowledge(self):
+        response = self.client.post(
+            "/api/advice",
+            json={
+                "question": "Gandum ke liye khaad ka kya mashwara hai?"
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        data = response.get_json()
+
+        self.assertEqual(data["fasal"], "Gandum")
+        self.assertEqual(data["sawal_ka_type"], "Khaad")
+        self.assertNotEqual(data["jawab"], "")
+        self.assertNotEqual(data["source"], "")
+
+    def test_gandum_bimari_knowledge(self):
+        response = self.client.post(
+            "/api/advice",
+            json={
+                "question": "Gandum mein bimari ka kya mashwara hai?"
+            }
+        )
+
+        self.assertEqual(response.status_code, 200)
+
+        data = response.get_json()
+
+        self.assertEqual(data["fasal"], "Gandum")
+        self.assertEqual(data["sawal_ka_type"], "Bimari")
+        self.assertNotEqual(data["jawab"], "")
+        self.assertNotEqual(data["source"], "")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
